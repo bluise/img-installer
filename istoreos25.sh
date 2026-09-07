@@ -6,7 +6,6 @@ mkdir -p output
 
 OUTPUT_PATH="openwrt/istoreos-25.12.5.img.gz"
 
-# 从你的cdn下载固件
 echo "正在下载 istoreos‑25.12.5.img.gz"
 wget -v --max-redirect=10 "https://file.tangzhiguo.cn/istoreos-25.12.5.img.gz" -O "${OUTPUT_PATH}"
 
