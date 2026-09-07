@@ -4,7 +4,7 @@ mkdir -p openwrt
 REPO="wukongdaily/img-installer"
 TAG="2025-03-12"
 FILE_NAME="https://file.tangzhiguo.cn/istoreos-25.12.5.img.gz"
-OUTPUT_PATH="openwrt/istoreos.img.gz"
+OUTPUT_PATH="openwrt/istoreos-25.12.5.img.gz"
 DOWNLOAD_URL=$(curl -s https://api.github.com/repos/$REPO/releases/tags/$TAG | jq -r '.assets[] | select(.name == "'"$FILE_NAME"'") | .browser_download_url')
 
 if [[ -z "$DOWNLOAD_URL" ]]; then
@@ -18,8 +18,8 @@ curl -L -o "$OUTPUT_PATH" "$DOWNLOAD_URL"
 
 if [[ $? -eq 0 ]]; then
   echo "下载istoreos成功!"
-  echo "正在解压为:istoreos.img"
-  gzip -d openwrt/istoreos.img.gz
+  echo "正在解压为:istoreos-25.12.5.img"
+  gzip -d openwrt/istoreos-25.12.5.img.gz
   ls -lh openwrt/
   echo "准备合成 istoreos 安装器"
 else
@@ -31,6 +31,6 @@ mkdir -p output
 docker run --privileged --rm \
         -v $(pwd)/output:/output \
         -v $(pwd)/supportFiles:/supportFiles:ro \
-        -v $(pwd)/openwrt/istoreos.img:/mnt/istoreos.img \
+        -v $(pwd)/openwrt/istoreos.img:/mnt/istoreos-25.12.5.img \
         debian:buster \
         /supportFiles/istoreos/build.sh
