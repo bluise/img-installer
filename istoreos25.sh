@@ -1,3 +1,6 @@
+#!/bin/bash
+mkdir -p openwrt
+
 REPO="wukongdaily/img-installer"
 TAG="2025-03-12"
 FILE_NAME="https://file.tangzhiguo.cn/istoreos-25.12.5.img.gz"
