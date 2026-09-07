@@ -15,6 +15,7 @@ if [[ $? -eq 0 ]]; then
   gzip -d "${OUTPUT_PATH}"
   ls -lh openwrt/
   echo "准备合成 istoreos 安装器ISO"
+  chmod +x supportFiles/istoreos/build.sh
 else
   echo "下载失败！"
   exit 1
