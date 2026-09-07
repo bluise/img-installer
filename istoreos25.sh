@@ -1,5 +1,5 @@
 #!/bin/bash
-FIRMWARE_URL="https://fw20.koolcenter.com/iStoreOS/alpha/25.12/x86_64_efi/istoreos-25.12.5-2026082723-x86-64-squashfs-combined-efi.img.gz"
+FIRMWARE_URL="https://file.tangzhiguo.cn/istoreos-25.12.5.img.gz"
 FIRMWARE_ARCHIVE="gz"
 FIRMWARE_NAME="iStoreOS-25.12"
 chmod +x ./autobuild/autobuild.sh
