@@ -1,0 +1,17 @@
+name: Build iStoreOS 25 Installer ISO
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run build script
+        run: bash istoreos25.sh
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: istoreos‑25‑installer‑iso
+          path: output/*.iso
