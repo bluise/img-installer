@@ -25,6 +25,6 @@ fi
 docker run --privileged --rm \
         -v $(pwd)/output:/output \
         -v $(pwd)/supportFiles:/supportFiles:ro \
-        -v $(pwd)/openwrt/istoreos-25.12.5.img:/mnt/istoreos-25.12.5.img \
+        -v $(pwd)/openwrt/istoreos-25.12.5.img:/mnt/istoreos.img \
         debian:buster \
         /supportFiles/istoreos/build.sh
