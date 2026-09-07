@@ -3,7 +3,7 @@ mkdir -p openwrt
 
 REPO="wukongdaily/img-installer"
 TAG="2025-03-12"
-FILE_NAME="https://file.tangzhiguo.cn/istoreos-25.12.5.img.gz"
+wget -v --max-redirect=10 "https://file.tangzhiguo.cn/istoreos-25.12.5.img.gz" -O "${LOCAL_FIRMWARE}"
 OUTPUT_PATH="openwrt/istoreos-25.12.5.img.gz"
 DOWNLOAD_URL=$(curl -s https://api.github.com/repos/$REPO/releases/tags/$TAG | jq -r '.assets[] | select(.name == "'"$FILE_NAME"'") | .browser_download_url')
 
@@ -31,6 +31,6 @@ mkdir -p output
 docker run --privileged --rm \
         -v $(pwd)/output:/output \
         -v $(pwd)/supportFiles:/supportFiles:ro \
-        -v $(pwd)/openwrt/istoreos.img:/mnt/istoreos-25.12.5.img \
+        -v $(pwd)/openwrt/istoreos-25.12.5.img:/mnt/istoreos-25.12.5.img \
         debian:buster \
         /supportFiles/istoreos/build.sh
