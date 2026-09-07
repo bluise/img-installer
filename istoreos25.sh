@@ -1,19 +1,33 @@
-#!/bin/bash
-wget -v --max-redirect=10 "https://file.tangzhiguo.cn/istoreos-25.12.5.img.gz" -O "firmware.img.gz"
+REPO="wukongdaily/img-installer"
+TAG="2025-03-12"
+FILE_NAME="https://file.tangzhiguo.cn/istoreos-25.12.5.img.gz"
+OUTPUT_PATH="openwrt/istoreos.img.gz"
+DOWNLOAD_URL=$(curl -s https://api.github.com/repos/$REPO/releases/tags/$TAG | jq -r '.assets[] | select(.name == "'"$FILE_NAME"'") | .browser_download_url')
 
-mkdir -p imm
-gunzip -f firmware.img.gz
-mv firmware.img imm/custom.img
+if [[ -z "$DOWNLOAD_URL" ]]; then
+  echo "错误：未找到文件 $FILE_NAME"
+  exit 1
+fi
 
-ls -lh imm/
+echo "下载地址: $DOWNLOAD_URL"
+echo "下载文件: $FILE_NAME -> $OUTPUT_PATH"
+curl -L -o "$OUTPUT_PATH" "$DOWNLOAD_URL"
 
-# 关键修复：给构建脚本增加可执行权限
-chmod +x ./supportFiles/custom/build.sh
+if [[ $? -eq 0 ]]; then
+  echo "下载istoreos成功!"
+  echo "正在解压为:istoreos.img"
+  gzip -d openwrt/istoreos.img.gz
+  ls -lh openwrt/
+  echo "准备合成 istoreos 安装器"
+else
+  echo "下载失败！"
+  exit 1
+fi
 
 mkdir -p output
 docker run --privileged --rm \
-    -v $(pwd)/output:/output \
-    -v $(pwd)/supportFiles:/supportFiles:ro \
-    -v $(pwd)/imm/custom.img:/mnt/custom.img \
-    debian:buster \
-    /supportFiles/custom/build.sh
+        -v $(pwd)/output:/output \
+        -v $(pwd)/supportFiles:/supportFiles:ro \
+        -v $(pwd)/openwrt/istoreos.img:/mnt/istoreos.img \
+        debian:buster \
+        /supportFiles/istoreos/build.sh
