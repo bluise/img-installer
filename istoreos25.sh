@@ -1,33 +1,27 @@
 #!/bin/bash
+set -e
+
 mkdir -p openwrt
+mkdir -p output
 
-REPO="wukongdaily/img-installer"
-TAG="2025-03-12"
-wget -v --max-redirect=10 "https://file.tangzhiguo.cn/istoreos-25.12.5.img.gz" -O "${LOCAL_FIRMWARE}"
 OUTPUT_PATH="openwrt/istoreos-25.12.5.img.gz"
-DOWNLOAD_URL=$(curl -s https://api.github.com/repos/$REPO/releases/tags/$TAG | jq -r '.assets[] | select(.name == "'"$FILE_NAME"'") | .browser_download_url')
 
-if [[ -z "$DOWNLOAD_URL" ]]; then
-  echo "错误：未找到文件 $FILE_NAME"
-  exit 1
-fi
-
-echo "下载地址: $DOWNLOAD_URL"
-echo "下载文件: $FILE_NAME -> $OUTPUT_PATH"
-curl -L -o "$OUTPUT_PATH" "$DOWNLOAD_URL"
+# 从你的cdn下载固件
+echo "正在下载 istoreos‑25.12.5.img.gz"
+wget -v --max-redirect=10 "https://file.tangzhiguo.cn/istoreos-25.12.5.img.gz" -O "${OUTPUT_PATH}"
 
 if [[ $? -eq 0 ]]; then
   echo "下载istoreos成功!"
   echo "正在解压为:istoreos-25.12.5.img"
-  gzip -d openwrt/istoreos-25.12.5.img.gz
+  gzip -d "${OUTPUT_PATH}"
   ls -lh openwrt/
-  echo "准备合成 istoreos 安装器"
+  echo "准备合成 istoreos 安装器ISO"
 else
   echo "下载失败！"
   exit 1
 fi
 
-mkdir -p output
+# docker构建安装镜像
 docker run --privileged --rm \
         -v $(pwd)/output:/output \
         -v $(pwd)/supportFiles:/supportFiles:ro \
